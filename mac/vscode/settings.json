@@ -1,0 +1,39 @@
+{
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.fontFamily": "'Operator Mono Lig', Menlo, Consolas, Monaco, 'Courier New', monospace",
+    "files.trimTrailingWhitespace": true,
+    "files.associations": {
+        "zshrc": "shellscript",
+        "*.wiki": "confluence",
+        "deploy_variables.txt": "robot"
+    },
+    "explorer.autoReveal": false,
+    "git.autofetch": true,
+    "extensions.ignoreRecommendations": false,
+    "editor.minimap.enabled": true,
+    "explorer.confirmDelete": false,
+    "breadcrumbs.enabled": true,
+    "workbench.editor.closeOnFileDelete": true,
+    "prettier.semi": false,
+    "prettier.singleQuote": true,
+    "prettier.tabWidth": 2,
+    "[javascript]": {
+        "editor.formatOnSave": true
+    },
+    "prettier.requireConfig": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "[json]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "editor.renderControlCharacters": false,
+    "editor.renderWhitespace": "none",
+    "window.zoomLevel": 0,
+    "sync.autoDownload": true,
+    "sync.autoUpload": true,
+    "sync.gist": "3fd4b4029a89724fb55fad4a792d72fc",
+    "terminal.integrated.shell.windows": "C:\\Program Files\\Git\\bin\\bash.exe",
+    "editor.fontLigatures": true,
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "workbench.colorTheme": "One Dark Pro Vivid"
+}

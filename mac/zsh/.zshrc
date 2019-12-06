@@ -1,0 +1,275 @@
+#
+# Executes commands at the start of an interactive session.
+#
+# Authors:
+#   Based on .bash_profile for Mac from Sorin Ionescu <sorin.ionescu@gmail.com>
+#   Ross Brandon <ross.brandon3@gmail.com>
+
+#POWERLEVEL9K_MODE='awesome-fontconfig'
+#POWERLEVEL9K_MODE='awesome-patched'
+#POWERLEVEL9K_MODE='nerdfont-complete'
+
+# Source Prezto.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+fi
+
+# Set ZSH options
+setopt nosharehistory
+setopt extended_glob
+
+# Set Path
+export PATH="/usr/local/bin:/usr/local/opt/openssl/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/usr/local/opt/php@7.2/bin:/usr/local/opt/php@7.2/sbin:$HOME/.composer/vendor/bin:$HOME/go/bin:$PATH:$HOME/bin/"
+export GPG_TTY=$(tty)
+
+# API Artifactory
+#export ARTIFACTORY_USER=
+#export ARTIFACTORY_API_TOKEN=
+#export TESSA2_API_KEY=
+
+# Vault
+#export VAULT_ADDR=https://vault.dev.or1.adobe.net
+
+#export AWS_ACCESS_KEY_ID=
+#export AWS_SECRET_ACCESS_KEY=
+#export AWS_SESSION_TOKEN=
+
+# Initialize jenv
+# eval "$(jenv init -)"
+
+# Customize to your needs...
+
+#POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir docker_machine vcs)
+#POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs root_indicator time)
+
+#   -----------------------------
+#   Directories
+#   -----------------------------
+
+java_install='/Library/Java/JavaVirtualMachines' # Java installation directory
+workspace='/Users/wbrandon/app/workspace' # My workspace directory
+magento_workspace="${workspace}/magento" # Magento workspace directory
+magento_vagrant="${magento_workspace}/vagrant-magento" # Magento Vagrant for Developers install directory
+magento_cloud="${magento_workspace}/cloud" # Magento cloud workspace directory
+magento_saas="${magento_workspace}/saas" # Magento saas workspace directory
+valet_sites="${magento_workspace}/sites" # Valet sites directory
+local_docs="${valet_sites}/docs" # Local documenation directory
+local_logs="${valet_sites}/log" # Local sites log directory
+local_scripts="${valet_sites}/scripts" # Local sites scripts directory
+onedrive="/Users/wbrandon/OneDrive - Adobe Systems Incorporated" # Adobe OneDrive directory
+
+#   -----------------------------
+#   Basic Aliases
+#   -----------------------------
+
+alias cp='cp -iv'                           # Preferred 'cp' implementation
+alias mv='mv -iv'                           # Preferred 'mv' implementation
+alias mkdir='mkdir -pv'                     # Preferred 'mkdir' implementation
+alias ll='ls -FGlAhp'                       # Preferred 'ls' implementation
+alias less='less -FSRXc'                    # Preferred 'less' implementation
+cdl() { builtin cd "$@"; ll; }               # Always list directory contents upon 'cd'
+alias cd..='cd ../'                         # Go back 1 directory level (for fast typers)
+alias ..='cd ../'                           # Go back 1 directory level
+alias ...='cd ../../'                       # Go back 2 directory levels
+alias .3='cd ../../../'                     # Go back 3 directory levels
+alias .4='cd ../../../../'                  # Go back 4 directory levels
+alias .5='cd ../../../../../'               # Go back 5 directory levels
+alias .6='cd ../../../../../../'            # Go back 6 directory levels
+alias edit='code'                           # edit:         Opens any file in VS Code editor
+alias f='open -a Finder ./'                 # f:            Opens current directory in MacOS Finder
+alias ~="cd ~"                              # ~:            Go Home
+alias c='clear'                             # c:            Clear terminal display
+alias path='echo -e ${PATH//:/\\n}'         # path:         Echo all executable Paths
+alias show_options='shopt'                  # Show_options: display bash options settings
+alias fix_stty='stty sane'                  # fix_stty:     Restore terminal settings when screwed up
+alias cic='set completion-ignore-case On'   # cic:          Make tab-completion case-insensitive
+mcd () { mkdir -p "$1" && cd "$1"; }        # mcd:          Makes new Dir and jumps inside
+trash () { command mv "$@" ~/.Trash ; }     # trash:        Moves a file to the MacOS trash
+ql () { qlmanage -p "$*" >& /dev/null; }    # ql:           Opens any file in MacOS Quicklook Preview
+alias DT='tee ~/Desktop/terminalOut.txt'    # DT:           Pipe content to file on MacOS Desktop
+alias cdjava='cd ${java_install}' # cd to the Java installation directory
+alias java8='sdk use java 8.0.202-zulu' # Change Java environment to 8
+alias java11='sdk use java 11.0.2-open' # Change Java Environment to 11
+alias onedrive='cd ${onedrive}' # cd to OneDrive directory
+# Start Portainer.io service for Docker
+alias portainer='docker run -d -p 9001:9000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer'
+# Start Selenium Standalone Chrome for Docker
+alias selenium-docker='docker run -d -p 4444:4444 -p 5900:5900 -v /dev/shm:/dev/shm selenium/standalone-chrome-debug:3.141.59-oxygen'
+alias dynamodb-docker='docker run -d -p 8000:8000 amazon/dynamodb-local -jar DynamoDBLocal.jar -sharedDb'
+
+#   -----------------------------
+# Magento Helpers
+#   -----------------------------
+alias cdm='cd ${magento_workspace}' # cd to magento workspace
+alias cdv='cd ${magento_vagrant}' # cd to magento Vagrant install directory
+alias cdc='cd ${magento_cloud}' # cd to magento cloud workspace directory
+#alias magento='bash ${magento_vagrant}/m-bin-magento' # Magento CLI
+alias commerce='php ${valet_sites}/m2commerce/bin/magento' # Magento CLI
+alias magento='php ${valet_sites}/magento2/bin/magento' # Magento CLI
+alias cron2='magento cron:run && magento cron:run' # Run Magento CLI cron job twice
+alias mc='magento-cloud' # Run Magento Cloud CLI
+alias sites='cd ${valet_sites}' # cd to Valet sites directory
+alias docs='cd ${local_docs}' # cd to local documentation directory
+alias logs='cd ${local_logs}' # cd to local sites log directory
+alias scripts='cd ${local_scripts}' # cd to local sites scripts directory
+alias saas='cd ${magento_saas}' # cd to Valet sites directory
+
+#   -------------------------------
+#   FILE AND FOLDER MANAGEMENT
+#   -------------------------------
+
+#   showfiles/hidefiles: show or hide hidden files in finder
+#   --------------------------------------------------------
+alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
+alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
+
+#   lr:  Full Recursive Directory Listing
+#   ------------------------------------------
+alias lr='ls -R | grep ":$" | sed -e '\''s/:$//'\'' -e '\''s/[^-][^\/]*\//--/g'\'' -e '\''s/^/   /'\'' -e '\''s/-/|/'\'' | less'
+
+#   mans:   Search manpage given in agument '1' for term given in argument '2' (case insensitive)
+#           displays paginated result with colored search terms and two lines surrounding each hit.             Example: mans mplayer codec
+#   --------------------------------------------------------------------
+    mans () {
+        man $1 | grep -iC2 --color=always $2 | less
+    }
+
+zipf() { zip -r "$1".zip "$1" ; }          # zipf:         To create a ZIP archive of a folder
+alias numFiles='echo $(ls -1 | wc -l)'      # numFiles:     Count of non-hidden files in current dir
+
+#   extract:  Extract most know archives with one command
+#   ---------------------------------------------------------
+    extract () {
+        if [ -f $1 ] ; then
+          case $1 in
+            *.tar.bz2)   tar xjf $1     ;;
+            *.tar.gz)    tar xzf $1     ;;
+            *.bz2)       bunzip2 $1     ;;
+            *.rar)       unrar e $1     ;;
+            *.gz)        gunzip $1      ;;
+            *.tar)       tar xf $1      ;;
+            *.tbz2)      tar xjf $1     ;;
+            *.tgz)       tar xzf $1     ;;
+            *.zip)       unzip $1       ;;
+            *.Z)         uncompress $1  ;;
+            *.7z)        7z x $1        ;;
+            *)     echo "'$1' cannot be extracted via extract()" ;;
+             esac
+         else
+             echo "'$1' is not a valid file"
+         fi
+    }
+
+#   ---------------------------
+#   SEARCHING
+#   ---------------------------
+
+alias qfind="find . -name "                 # qfind:    Quickly search for file
+ff () { /usr/bin/find . -name "$@" ; }      # ff:       Find file under the current directory
+ffs () { /usr/bin/find . -name "$@"'*' ; }  # ffs:      Find file whose name starts with a given string
+ffe () { /usr/bin/find . -name '*'"$@" ; }  # ffe:      Find file whose name ends with a given string
+
+#   spotlight: Search for a file using MacOS Spotlight's metadata
+#   -----------------------------------------------------------
+    spotlight () { mdfind "kMDItemDisplayName == '$@'wc"; }
+
+
+#   ---------------------------
+#   PROCESS MANAGEMENT
+#   ---------------------------
+
+#   findPid: find out the pid of a specified process
+#   -----------------------------------------------------
+#       Note that the command name can be specified via a regex
+#       E.g. findPid '/d$/' finds pids of all processes with names ending in 'd'
+#       Without the 'sudo' it will only find processes of the current user
+#   -----------------------------------------------------
+    findPid () { lsof -t -c "$@" ; }
+
+#   memHogsTop, memHogsPs:  Find memory hogs
+#   -----------------------------------------------------
+alias memHogsTop='top -l 1 -o rsize | head -20'
+alias memHogsPs='ps wwaxm -o pid,stat,vsize,rss,time,command | head -10'
+
+#   cpuHogs:  Find CPU hogs
+#   -----------------------------------------------------
+alias cpu_hogs='ps wwaxr -o pid,stat,%cpu,time,command | head -10'
+
+#   topForever:  Continual 'top' listing (every 10 seconds)
+#   -----------------------------------------------------
+alias topForever='top -l 9999999 -s 10 -o cpu'
+
+#   ttop:  Recommended 'top' invocation to minimize resources
+#   ------------------------------------------------------------
+#       Taken from this macosxhints article
+#       http://www.macosxhints.com/article.php?story=20060816123853639
+#   ------------------------------------------------------------
+alias ttop="top -R -F -s 10 -o rsize"
+
+#   my_ps: List processes owned by my user:
+#   ------------------------------------------------------------
+    my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,start,time,bsdtime,command ; }
+
+
+#   ---------------------------
+#   NETWORKING
+#   ---------------------------
+
+alias myip='curl ipinfo.io/ip'                      # myip:         Public facing IP Address
+alias netCons='lsof -i'                             # netCons:      Show all open TCP/IP sockets
+alias flushDNS='dscacheutil -flushcache'            # flushDNS:     Flush out the DNS Cache
+alias lsock='sudo /usr/sbin/lsof -i -P'             # lsock:        Display open sockets
+alias lsockU='sudo /usr/sbin/lsof -nP | grep UDP'   # lsockU:       Display only open UDP sockets
+alias lsockT='sudo /usr/sbin/lsof -nP | grep TCP'   # lsockT:       Display only open TCP sockets
+alias ipInfo0='ipconfig getpacket en0'              # ipInfo0:      Get info on connections for en0
+alias ipInfo1='ipconfig getpacket en1'              # ipInfo1:      Get info on connections for en1
+alias openPorts='sudo lsof -i | grep LISTEN'        # openPorts:    All listening connections
+alias showBlocked='sudo ipfw list'                  # showBlocked:  All ipfw rules inc/ blocked IPs
+
+#   ii:  display useful host related informaton
+#   -------------------------------------------------------------------
+    ii() {
+        echo -e "\nYou are logged on ${RED}$HOST"
+        echo -e "\nAdditionnal information:$NC " ; uname -a
+        echo -e "\n${RED}Users logged on:$NC " ; w -h
+        echo -e "\n${RED}Current date :$NC " ; date
+        echo -e "\n${RED}Machine stats :$NC " ; uptime
+        echo -e "\n${RED}Current network location :$NC " ; scselect
+        echo -e "\n${RED}Public facing IP Address :$NC " ;myip
+        #echo -e "\n${RED}DNS Configuration:$NC " ; scutil --dns
+        echo
+    }
+
+#   cleanupDS:  Recursively delete .DS_Store files
+#   -------------------------------------------------------------------
+alias cleanupDS="find . -type f -name '*.DS_Store' -ls -delete"
+
+#   finderShowHidden:   Show hidden files in Finder
+#   finderHideHidden:   Hide hidden files in Finder
+#   -------------------------------------------------------------------
+alias finderShowHidden='defaults write com.apple.finder ShowAllFiles TRUE'
+alias finderHideHidden='defaults write com.apple.finder ShowAllFiles FALSE'
+
+#   cleanupLS:  Clean up LaunchServices to remove duplicates in the "Open With" menu
+#   -----------------------------------------------------------------------------------
+alias cleanupLS="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
+
+#   ---------------------------------------
+#   WEB DEVELOPMENT
+#   ---------------------------------------
+
+alias apacheEdit='sudo edit /etc/httpd/httpd.conf'      # apacheEdit:       Edit httpd.conf
+alias apacheRestart='sudo apachectl graceful'           # apacheRestart:    Restart Apache
+alias editHosts='sudo edit /etc/hosts'                  # editHosts:        Edit /etc/hosts file
+alias herr='tail /var/log/httpd/error_log'              # herr:             Tails HTTP error logs
+alias apacheLogs="less +F /var/log/apache2/error_log"   # Apachelogs:   Shows apache error logs
+httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grabs headers from web page
+
+#   httpDebug:  Download a web page and show info on what took time
+#   -------------------------------------------------------------------
+httpDebug () { /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ; }
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/Users/wbrandon/.sdkman"
+[[ -s "/Users/wbrandon/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/wbrandon/.sdkman/bin/sdkman-init.sh"
+# Remember - you had to brew cask install adoptopenjdk/openjdk/adoptopenjdk8 on top of this for logstash command line to work
